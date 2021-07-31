@@ -697,9 +697,9 @@ let body = '', res = '', uuid = 'fc13275e23b2613e6aae772533ca6f349d2e0a86', ua='
       await main();
     }
   }
-  if ($.isNode() && allMessage) {
+  //if ($.isNode() && allMessage) {
     // await notify.sendNotify(`${$.name}`, `${allMessage}`, { url: openUrl })
-  }
+ // }
 })()
 
 async function main() {
