@@ -62,7 +62,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
     }
   }
   if ($.isNode() && allMessage) {
-    await notify.sendNotify(`${$.name}`, `${allMessage}`, { url: openUrl })
+  //  await notify.sendNotify(`${$.name}`, `${allMessage}`, { url: openUrl })
   }
 })()
     .catch((e) => {
