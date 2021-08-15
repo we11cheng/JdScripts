@@ -1586,7 +1586,7 @@ function showMsg() {
 
       if ($.isNode())
 	  {
-		  if (process.env.CFD_NOTIFY_CONTROL || cfdNotify )
+		  if (process.env.CFD_NOTIFY_CONTROL || cfdNotify == false )
 		    await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `${$.result.join("\n")}`);
 	  }
     }
