@@ -1584,11 +1584,6 @@ function showMsg() {
         $.msg($.name, "", `${$.result.join("\n")}`);
       }
 
-      if ($.isNode())
-	  {
-		  if ( cfdNotify == true || process.env.CFD_NOTIFY_CONTROL )
-		    await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `${$.result.join("\n")}`);
-	  }
     }
     resolve();
   });
