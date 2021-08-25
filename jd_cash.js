@@ -87,8 +87,8 @@ let allMessage = '';
 async function jdCash() {
   $.signMoney = 0;
   await index()
-  await shareCodesFormat()
-  await helpFriends()
+ // await shareCodesFormat()
+ // await helpFriends()
   await getReward()
   await getReward('2');
   $.exchangeBeanNum = 0;
