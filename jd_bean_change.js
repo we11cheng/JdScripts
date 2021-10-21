@@ -12,6 +12,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const JXUserAgent = $.isNode() ? (process.env.JX_USER_AGENT ? process.env.JX_USER_AGENT : ``) : ``;
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+let expireNotify=0;
 let allMessage = '';
 let allMessage2 = '';
 let allReceiveMessage = '';
@@ -65,7 +66,7 @@ RemainMessage += '【京东秒杀】京东->中间频道往右划找到京东秒
 RemainMessage += '【东东萌宠】京东->我的->东东萌宠,完成是京东红包,可以用于京东app的任意商品\n';
 RemainMessage += '【领现金】京东->我的->东东萌宠->领现金(微信提现+京东红包)\n';
 RemainMessage += '【东东农场】京东->我的->东东农场,完成是京东红包,可以用于京东app的任意商品\n';
-RemainMessage += '【京喜工厂】京喜->我的->京喜工厂,完成是商品红包,用于购买指定商品(不兑换会过期)\n';
+//RemainMessage += '【京喜工厂】京喜->我的->京喜工厂,完成是商品红包,用于购买指定商品(不兑换会过期)\n';
 RemainMessage += '【其他】京喜红包只能在京喜使用,其他同理';
 
 let WP_APP_TOKEN_ONE = "";
@@ -207,8 +208,8 @@ if ($.isNode()) {
 				await $.wait(10 * 1000);
 			}
 
-			await getJxFactory(); //京喜工厂
-			await getDdFactoryInfo(); // 京东工厂
+//			await getJxFactory(); //京喜工厂
+//			await getDdFactoryInfo(); // 京东工厂
 			if (DisableCash == "false") {
 				await jdCash();
 			}
@@ -217,10 +218,11 @@ if ($.isNode()) {
 			if (intPerSent > 0) {
 				if ((i + 1) % intPerSent == 0) {
 					console.log("分段通知条件达成，处理发送通知....");
-					if ($.isNode() && allMessage) {
+					if ($.isNode() && allMessage && expireNotify == 1 ) {
 						await notify.sendNotify(`${$.name}`, `${allMessage}`, {
 							url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
 						})
+						 expireNotify == 0;
 					}
 					if ($.isNode() && allMessageMonth) {
 						await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
@@ -282,10 +284,11 @@ if ($.isNode()) {
 		//console.log("分段通知还剩下" + cookiesArr.length % intPerSent + "个账号需要发送...");
 		if (allMessage || allMessageMonth) {
 			console.log("分段通知收尾，处理发送通知....");
-			if ($.isNode() && allMessage) {
+			if ($.isNode() && allMessage expireNotify == 1 ) {
 				await notify.sendNotify(`${$.name}`, `${allMessage}`, {
 					url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
 				})
+				expireNotify == 0;
 			}
 			if ($.isNode() && allMessageMonth) {
 				await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
@@ -415,7 +418,7 @@ async function showMsg() {
 		ReturnMessageTitle = `【账号${IndexAll}🆔】${$.nickName || $.UserName}\n`;
 	}
 
-	if ($.levelName || $.JingXiang){
+/* 	if ($.levelName || $.JingXiang){
 		ReturnMessage += `【账号信息】`;
 		if ($.levelName) {
 			if ($.levelName.length > 2)
@@ -447,7 +450,7 @@ async function showMsg() {
 				ReturnMessage +=",";
 			}
 			ReturnMessage += `${$.JingXiang}`;
-		}
+		} */
 		ReturnMessage +=`\n`;
 	}
 	if (llShowMonth) {
@@ -475,7 +478,7 @@ async function showMsg() {
 
 	}
 
-	ReturnMessage += `【今日京豆】收${$.todayIncomeBean}豆`;
+/* 	ReturnMessage += `【今日京豆】收${$.todayIncomeBean}豆`;
 
 	if ($.todayOutcomeBean != 0) {
 		ReturnMessage += `,支${$.todayOutcomeBean}豆`;
@@ -492,7 +495,7 @@ async function showMsg() {
 		ReturnMessage += `【当前京豆】${$.beanCount}豆(≈${($.beanCount / 100).toFixed(2)}元)\n`;
 	} else {
 		ReturnMessage += `【当前京豆】获取失败,接口返回空数据\n`;
-	}
+	} */
 
 	if (typeof $.JDEggcnt !== "undefined") {
 		if ($.JDEggcnt == 0) {
@@ -590,7 +593,7 @@ async function showMsg() {
 			}
 		}
 	}
-	if ($.jxFactoryInfo) {
+/* 	if ($.jxFactoryInfo) {
 		ReturnMessage += `【京喜工厂】${$.jxFactoryInfo}\n`
 	}
 	if ($.ddFactoryInfo) {
@@ -627,7 +630,7 @@ async function showMsg() {
 
 		TempBaipiao += `【京喜工厂】${$.jxFactoryReceive} 可以兑换了!\n`;
 
-	}
+	} */
 	const response = await PetRequest('energyCollect');
 	const initPetTownRes = await PetRequest('initPetTown');
 	if (initPetTownRes.code === '0' && initPetTownRes.resultCode === '0' && initPetTownRes.message === 'success') {
@@ -1235,6 +1238,8 @@ function redPacket() {
 						$.balance = data.balance;
 						$.expiredBalance = ($.jxRedExpire + $.jsRedExpire + $.jdRedExpire).toFixed(2);
 						$.message += `【红包总额】${$.balance}(总过期${$.expiredBalance})元 \n`;
+						if ($.expiredBalance >= 3 && $.balance >= 5 )
+							expireNotify = 1;
 						if ($.jxRed > 0)
 							$.message += `【京喜红包】${$.jxRed}(将过期${$.jxRedExpire.toFixed(2)})元 \n`;
 						if ($.jsRed > 0)
