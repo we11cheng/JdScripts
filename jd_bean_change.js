@@ -450,9 +450,9 @@ async function showMsg() {
 				ReturnMessage +=",";
 			}
 			ReturnMessage += `${$.JingXiang}`;
-		} */
+		} 
 		ReturnMessage +=`\n`;
-	}
+	}*/
 	if (llShowMonth) {
 		ReturnMessageMonth = ReturnMessage;
 		ReturnMessageMonth += `\n【上月收入】：${$.allincomeBean}京豆 🐶\n`;
