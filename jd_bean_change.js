@@ -12,7 +12,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const JXUserAgent = $.isNode() ? (process.env.JX_USER_AGENT ? process.env.JX_USER_AGENT : ``) : ``;
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let expireNotify=0;
+let expireNotify = 0;
 let allMessage = '';
 let allMessage2 = '';
 let allReceiveMessage = '';
@@ -222,7 +222,7 @@ if ($.isNode()) {
 						await notify.sendNotify(`${$.name}`, `${allMessage}`, {
 							url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
 						})
-						 expireNotify == 0;
+						 expireNotify = 0;
 					}
 					if ($.isNode() && allMessageMonth) {
 						await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
@@ -288,7 +288,7 @@ if ($.isNode()) {
 				await notify.sendNotify(`${$.name}`, `${allMessage}`, {
 					url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
 				})
-				expireNotify == 0;
+				expireNotify = 0;
 			}
 			if ($.isNode() && allMessageMonth) {
 				await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
