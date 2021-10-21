@@ -244,7 +244,7 @@ async function all(cookie, jrBody) {
     TotalSubsidy(), //总金贴查询
     TotalMoney() //总现金查询
   ]);
-//  await notify(); //通知模块
+  await notify(); //通知模块
 }
 
 function notify() {
@@ -345,7 +345,7 @@ function notify() {
         throw new Error(`账号Cookie读取失败, 请检查Json格式. \n${e.message}`)
       }
     }
-//    sendNotify("京东多合一签到SCF:",notification)
+    sendNotify("京东多合一签到SCF:",notification)
     $nobyda.time();
   } else {
     throw new Error('脚本终止, 未获取Cookie ‼️')
