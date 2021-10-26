@@ -262,7 +262,6 @@ function drawInfo(share=true) {
                 while (i-- && time >= 23 ) {
                   await draw()
                   await $.wait(1000)
-                  console.log("抽奖喽")
                 }
               }
             } else {
