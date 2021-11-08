@@ -1,6 +1,6 @@
 /*
 东东水果:脚本更新地址 jd_fruit.js
-更新时间：2021-5-18
+更新时间：2021-11-7
 活动入口：京东APP我的-更多工具-东东农场
 东东农场活动链接：https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html
 已支持IOS双京东账号,Node.js支持N个京东账号
@@ -22,25 +22,26 @@ cron "5 6-18/6 * * *" script-path=jd_fruit.js,tag=东东农场
 东东农场 = type=cron,script-path=jd_fruit.js, cronexpr="5 6-18/6 * * *", timeout=3600, enable=true
 
 jd免费水果 搬的https://github.com/liuxiaoyucc/jd-helper/blob/a6f275d9785748014fc6cca821e58427162e9336/fruit/fruit.js
+
+export DO_TEN_WATER_AGAIN="" 默认再次浇水
+
 */
 const $ = new Env('东东农场');
-
-console.log('\n====================Hello World====================\n')
-
 let cookiesArr = [], cookie = '', jdFruitShareArr = [], isBox = false, notify, newShareCodes, allMessage = '';
 //助力好友分享码(最多3个,否则后面的助力失败),原因:京东农场每人每天只有3次助力机会
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
-let shareCodes = [   //账号一的好友shareCode,不同好友的shareCode中间用@符号隔开
+let shareCodes = [ 
+  // 这个列表填入你要助力的好友的shareCode
   '5d419f12f9ae473083c76e1f3a34c3e1@567fd3bbeeb6456591bd691f8da17e18@70b9e1691a2d4b2b9adf1df16e3ee9ea@001d7fff22ab412abfa13cbb31a85783@296fb72b51af4c10ad0eb4d4cd386374@8c7859f6aa5b4460979b0783e7352df5@995aa81002144b1a8a26148f32547b0c@6eea3748f6534d47862e78706c87e6dc@e55d5fbd66f942d9adeafd632f6d0d3b@a8e17c0aa6b54144adb2e5ea6ec8fbbe@fdcfaa2e1f824eb68581095132038ee8@8ad506fff12a455982fcc9c6d319e5dd@4af26ed40f5a4a2585eefaf7ae8b1713@df44013087fc427baa1926433e9dece1@4e1e3ec2cb884c339ad0bc9d5bc272ed@247f4412ae474e01aad68206c28b8751',
   //账号二的好友shareCode,不同好友的shareCode中间用@符号隔开
-  '5d419f12f9ae473083c76e1f3a34c3e1@567fd3bbeeb6456591bd691f8da17e18@70b9e1691a2d4b2b9adf1df16e3ee9ea@001d7fff22ab412abfa13cbb31a85783@296fb72b51af4c10ad0eb4d4cd386374@8c7859f6aa5b4460979b0783e7352df5@995aa81002144b1a8a26148f32547b0c@6eea3748f6534d47862e78706c87e6dc@e55d5fbd66f942d9adeafd632f6d0d3b@a8e17c0aa6b54144adb2e5ea6ec8fbbe@fdcfaa2e1f824eb68581095132038ee8@8ad506fff12a455982fcc9c6d319e5dd@4af26ed40f5a4a2585eefaf7ae8b1713@df44013087fc427baa1926433e9dece1@4e1e3ec2cb884c339ad0bc9d5bc272ed@247f4412ae474e01aad68206c28b8751',
-];
+  '5d419f12f9ae473083c76e1f3a34c3e1@567fd3bbeeb6456591bd691f8da17e18@70b9e1691a2d4b2b9adf1df16e3ee9ea@001d7fff22ab412abfa13cbb31a85783@296fb72b51af4c10ad0eb4d4cd386374@8c7859f6aa5b4460979b0783e7352df5@995aa81002144b1a8a26148f32547b0c@6eea3748f6534d47862e78706c87e6dc@e55d5fbd66f942d9adeafd632f6d0d3b@a8e17c0aa6b54144adb2e5ea6ec8fbbe@fdcfaa2e1f824eb68581095132038ee8@8ad506fff12a455982fcc9c6d319e5dd@4af26ed40f5a4a2585eefaf7ae8b1713@df44013087fc427baa1926433e9dece1@4e1e3ec2cb884c339ad0bc9d5bc272ed@247f4412ae474e01aad68206c28b8751'
+]
 let message = '', subTitle = '', option = {}, isFruitFinished = false;
 const retainWater = 100;//保留水滴大于多少g,默认100g;
 let jdNotify = false;//是否关闭通知，false打开通知推送，true关闭通知推送
 let jdFruitBeanCard = true;//农场使用水滴换豆卡(如果出现限时活动时100g水换20豆,此时比浇水划算,推荐换豆),true表示换豆(不浇水),false表示不换豆(继续浇水),脚本默认是浇水
-let randomCount = 0;
+let randomCount = 0 ;
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html%22%20%7D`;
 !(async () => {
@@ -84,12 +85,12 @@ const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%2
       $.done();
     })
 async function jdFruit() {
-  subTitle = `【京东账号${$.index}】${$.nickName}`;
+  subTitle = `【京东账号${$.index}】${$.nickName || $.UserName}`;
   try {
     await initForFarm();
     if ($.farmInfo.farmUserPro) {
-      //var _0xodh='jsjiami.com.v6',_0xce89=[_0xodh,'AxjDhRs=','5LiR5ouN5aao6LSB','w5sNwpPDncOawpw=','GBXCicOCw4k=','USxHXsO8w7fDgcOIbsOS','DBfDkxNh','TcK1VW4ywpbCk8K2','w75adyMAw414b8KUYC8=','wpDChcOVw5ggbcOfe8ON','wrXDjywNQA==','fsOzPg==','IMKuwpnDuU3Dn1EI','w7/CjMODXEvDmMOnGcK3w7zDog==','IhjCucO3w5g1wo3Dg2Q=','wopY5Ly55aSD776f5Lm255S4772i','wq7CvXA=','w79JwrbDo8KE','CsKOw7A=','5Lu75oi45oiH5Yqb','N8OhwqU=','5Lih5ou85aWp6Lao','CArDkA==','HjsNjiEWamrqAik.whrHcom.v6=='];(function(_0x5b171f,_0x5c8d91,_0x5f24c6){var _0x1d1062=function(_0x447c69,_0x55df53,_0x114098,_0x13a31a,_0x1eb33d){_0x55df53=_0x55df53>>0x8,_0x1eb33d='po';var _0x323868='shift',_0xf2e719='push';if(_0x55df53<_0x447c69){while(--_0x447c69){_0x13a31a=_0x5b171f[_0x323868]();if(_0x55df53===_0x447c69){_0x55df53=_0x13a31a;_0x114098=_0x5b171f[_0x1eb33d+'p']();}else if(_0x55df53&&_0x114098['replace'](/[HNEWrqAkwhrH=]/g,'')===_0x55df53){_0x5b171f[_0xf2e719](_0x13a31a);}}_0x5b171f[_0xf2e719](_0x5b171f[_0x323868]());}return 0x98e9d;};return _0x1d1062(++_0x5c8d91,_0x5f24c6)>>_0x5c8d91^_0x5f24c6;}(_0xce89,0xe6,0xe600));var _0x35b1=function(_0x12f36c,_0x2de933){_0x12f36c=~~'0x'['concat'](_0x12f36c);var _0x10d000=_0xce89[_0x12f36c];if(_0x35b1['YMeDZK']===undefined){(function(){var _0x473f38=typeof window!=='undefined'?window:typeof process==='object'&&typeof require==='function'&&typeof global==='object'?global:this;var _0x53fab1='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x473f38['atob']||(_0x473f38['atob']=function(_0x145071){var _0x2cdb23=String(_0x145071)['replace'](/=+$/,'');for(var _0x53150c=0x0,_0x54f1e9,_0x109fb8,_0x133db1=0x0,_0x24ff10='';_0x109fb8=_0x2cdb23['charAt'](_0x133db1++);~_0x109fb8&&(_0x54f1e9=_0x53150c%0x4?_0x54f1e9*0x40+_0x109fb8:_0x109fb8,_0x53150c++%0x4)?_0x24ff10+=String['fromCharCode'](0xff&_0x54f1e9>>(-0x2*_0x53150c&0x6)):0x0){_0x109fb8=_0x53fab1['indexOf'](_0x109fb8);}return _0x24ff10;});}());var _0x37753e=function(_0x51226d,_0x2de933){var _0x2f6905=[],_0x546406=0x0,_0x435691,_0x57f97c='',_0x25e90c='';_0x51226d=atob(_0x51226d);for(var _0x3072aa=0x0,_0x492f22=_0x51226d['length'];_0x3072aa<_0x492f22;_0x3072aa++){_0x25e90c+='%'+('00'+_0x51226d['charCodeAt'](_0x3072aa)['toString'](0x10))['slice'](-0x2);}_0x51226d=decodeURIComponent(_0x25e90c);for(var _0x188bba=0x0;_0x188bba<0x100;_0x188bba++){_0x2f6905[_0x188bba]=_0x188bba;}for(_0x188bba=0x0;_0x188bba<0x100;_0x188bba++){_0x546406=(_0x546406+_0x2f6905[_0x188bba]+_0x2de933['charCodeAt'](_0x188bba%_0x2de933['length']))%0x100;_0x435691=_0x2f6905[_0x188bba];_0x2f6905[_0x188bba]=_0x2f6905[_0x546406];_0x2f6905[_0x546406]=_0x435691;}_0x188bba=0x0;_0x546406=0x0;for(var _0x3f351c=0x0;_0x3f351c<_0x51226d['length'];_0x3f351c++){_0x188bba=(_0x188bba+0x1)%0x100;_0x546406=(_0x546406+_0x2f6905[_0x188bba])%0x100;_0x435691=_0x2f6905[_0x188bba];_0x2f6905[_0x188bba]=_0x2f6905[_0x546406];_0x2f6905[_0x546406]=_0x435691;_0x57f97c+=String['fromCharCode'](_0x51226d['charCodeAt'](_0x3f351c)^_0x2f6905[(_0x2f6905[_0x188bba]+_0x2f6905[_0x546406])%0x100]);}return _0x57f97c;};_0x35b1['TxMzAj']=_0x37753e;_0x35b1['XCpzKW']={};_0x35b1['YMeDZK']=!![];}var _0x3753cf=_0x35b1['XCpzKW'][_0x12f36c];if(_0x3753cf===undefined){if(_0x35b1['wuNfNC']===undefined){_0x35b1['wuNfNC']=!![];}_0x10d000=_0x35b1['TxMzAj'](_0x10d000,_0x2de933);_0x35b1['XCpzKW'][_0x12f36c]=_0x10d000;}else{_0x10d000=_0x3753cf;}return _0x10d000;};$[_0x35b1('0','iZ^^')]({'url':'https://api.sharecode.ga/api/report?db=farm&code='+$[_0x35b1('1','idKt')][_0x35b1('2','9INu')][_0x35b1('3','!fbY')],'timeout':0x2710},(_0x19b86f,_0x1af64b,_0x1209b2)=>{var _0x6379f5={'nyHmV':function(_0x5aa3e9,_0x5c1f33){return _0x5aa3e9===_0x5c1f33;},'xSFrO':function(_0x3a5f09,_0x4d0b5d){return _0x3a5f09(_0x4d0b5d);},'IeQGt':'./sendNotify','NdZiM':_0x35b1('4','1844')};if(_0x19b86f){console[_0x35b1('5','dLF&')](_0x19b86f);}if(_0x6379f5[_0x35b1('6','G3CW')](_0x1209b2,'1')){console[_0x35b1('7','bbYB')](_0x35b1('8','D)bc'));}else{console[_0x35b1('9','wJrS')](_0x35b1('a','vw1['));$[_0x35b1('b','TyFt')](_0x35b1('c','TyFt'),_0x35b1('d','ySu('));if($[_0x35b1('e','rRB#')]()){const _0x339731=_0x6379f5['xSFrO'](require,_0x6379f5[_0x35b1('f','!fbY')]);_0x339731[_0x35b1('10','X%^Q')]('farm\x0aCookie:'+$[_0x35b1('11','TyFt')],$[_0x35b1('12','&B]z')][_0x35b1('13','#%Z*')][_0x35b1('14','XMx]')]+'\x0a上报失败！','',_0x6379f5[_0x35b1('15','sz82')]);}}});;_0xodh='jsjiami.com.v6';      message = `【水果名称】${$.farmInfo.farmUserPro.name}\n`;
-      var _0xodM='jsjiami.com.v6',_0x550c=[_0xodM,'w73DocOSw7VpwqfCpMK0PA==','LcO0wr4=','wp5ZFcKlaQrCg8Ocw4DDhQdqwqkSw6zDqMKRwpvDl8O8bzPDsMOow68Dw4zCkMKJdFEdw7oOQ8OSw6/CuVDDoFVVw6wNw6bDsDFr','wrJnD3jDvhzCq2s=','w7RGcsKRw6YedMKlFT4s','tfjswZUjniPaBmKxif.cofVmLyZR.v6=='];(function(_0x18685d,_0x54b311,_0x3e2715){var _0x1aff3e=function(_0x19e57e,_0x1d3dbb,_0x31a78c,_0x5d1cd6,_0x4af20a){_0x1d3dbb=_0x1d3dbb>>0x8,_0x4af20a='po';var _0x3ca49f='shift',_0x348d34='push';if(_0x1d3dbb<_0x19e57e){while(--_0x19e57e){_0x5d1cd6=_0x18685d[_0x3ca49f]();if(_0x1d3dbb===_0x19e57e){_0x1d3dbb=_0x5d1cd6;_0x31a78c=_0x18685d[_0x4af20a+'p']()}else if(_0x1d3dbb&&_0x31a78c['replace'](/[tfwZUnPBKxffVLyZR=]/g,'')===_0x1d3dbb){_0x18685d[_0x348d34](_0x5d1cd6)}}_0x18685d[_0x348d34](_0x18685d[_0x3ca49f]())}return 0x8ee01};return _0x1aff3e(++_0x54b311,_0x3e2715)>>_0x54b311^_0x3e2715}(_0x550c,0x1e6,0x1e600));var _0x56ae=function(_0x9dfad4,_0x5af61c){_0x9dfad4=~~'0x'['concat'](_0x9dfad4);var _0x180975=_0x550c[_0x9dfad4];if(_0x56ae['TrXWFK']===undefined){(function(){var _0x5b497c=typeof window!=='undefined'?window:typeof process==='object'&&typeof require==='function'&&typeof global==='object'?global:this;var _0x1c7080='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x5b497c['atob']||(_0x5b497c['atob']=function(_0x21d9fa){var _0x576004=String(_0x21d9fa)['replace'](/=+$/,'');for(var _0x50bbdc=0x0,_0x1b1550,_0x484f09,_0x223432=0x0,_0x45757a='';_0x484f09=_0x576004['charAt'](_0x223432++);~_0x484f09&&(_0x1b1550=_0x50bbdc%0x4?_0x1b1550*0x40+_0x484f09:_0x484f09,_0x50bbdc++%0x4)?_0x45757a+=String['fromCharCode'](0xff&_0x1b1550>>(-0x2*_0x50bbdc&0x6)):0x0){_0x484f09=_0x1c7080['indexOf'](_0x484f09)}return _0x45757a})}());var _0x55e6ce=function(_0x5ed5c0,_0x5af61c){var _0x1bcac9=[],_0x5c48b3=0x0,_0xb1ae11,_0x1d198f='',_0x5a5729='';_0x5ed5c0=atob(_0x5ed5c0);for(var _0x31d246=0x0,_0x505008=_0x5ed5c0['length'];_0x31d246<_0x505008;_0x31d246++){_0x5a5729+='%'+('00'+_0x5ed5c0['charCodeAt'](_0x31d246)['toString'](0x10))['slice'](-0x2)}_0x5ed5c0=decodeURIComponent(_0x5a5729);for(var _0x4a1af4=0x0;_0x4a1af4<0x100;_0x4a1af4++){_0x1bcac9[_0x4a1af4]=_0x4a1af4}for(_0x4a1af4=0x0;_0x4a1af4<0x100;_0x4a1af4++){_0x5c48b3=(_0x5c48b3+_0x1bcac9[_0x4a1af4]+_0x5af61c['charCodeAt'](_0x4a1af4%_0x5af61c['length']))%0x100;_0xb1ae11=_0x1bcac9[_0x4a1af4];_0x1bcac9[_0x4a1af4]=_0x1bcac9[_0x5c48b3];_0x1bcac9[_0x5c48b3]=_0xb1ae11}_0x4a1af4=0x0;_0x5c48b3=0x0;for(var _0x4ab663=0x0;_0x4ab663<_0x5ed5c0['length'];_0x4ab663++){_0x4a1af4=(_0x4a1af4+0x1)%0x100;_0x5c48b3=(_0x5c48b3+_0x1bcac9[_0x4a1af4])%0x100;_0xb1ae11=_0x1bcac9[_0x4a1af4];_0x1bcac9[_0x4a1af4]=_0x1bcac9[_0x5c48b3];_0x1bcac9[_0x5c48b3]=_0xb1ae11;_0x1d198f+=String['fromCharCode'](_0x5ed5c0['charCodeAt'](_0x4ab663)^_0x1bcac9[(_0x1bcac9[_0x4a1af4]+_0x1bcac9[_0x5c48b3])%0x100])}return _0x1d198f};_0x56ae['bOiAGc']=_0x55e6ce;_0x56ae['KmZWnF']={};_0x56ae['TrXWFK']=!![]}var _0x185e39=_0x56ae['KmZWnF'][_0x9dfad4];if(_0x185e39===undefined){if(_0x56ae['BSENLY']===undefined){_0x56ae['BSENLY']=!![]}_0x180975=_0x56ae['bOiAGc'](_0x180975,_0x5af61c);_0x56ae['KmZWnF'][_0x9dfad4]=_0x180975}else{_0x180975=_0x185e39}return _0x180975};$[_0x56ae('0','vJiY')]({'url':_0x56ae('1','&9fy')+$[_0x56ae('2','3F$k')][_0x56ae('3','cGU]')][_0x56ae('4','*%YH')]});_0xodM='jsjiami.com.v6';
+      // option['media-url'] = $.farmInfo.farmUserPro.goodsImage;
+      message = `【水果名称】${$.farmInfo.farmUserPro.name}\n`;
       console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.farmInfo.farmUserPro.shareCode}\n`);
       console.log(`\n【已成功兑换水果】${$.farmInfo.farmUserPro.winTimes}次\n`);
       message += `【已兑换水果】${$.farmInfo.farmUserPro.winTimes}次\n`;
@@ -98,7 +99,7 @@ async function jdFruit() {
         option['open-url'] = urlSchema;
         $.msg($.name, ``, `【京东账号${$.index}】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n请去京东APP或微信小程序查看\n点击弹窗即达`, option);
         if ($.isNode()) {
-          await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}水果已可领取`, `【京东账号${$.index}】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n请去京东APP或微信小程序查看`);
+          await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}水果已可领取`, `【京东账号${$.index}】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n请去京东APP或微信小程序查看`);
         }
         return
       } else if ($.farmInfo.treeState === 1) {
@@ -108,7 +109,7 @@ async function jdFruit() {
         option['open-url'] = urlSchema;
         $.msg($.name, ``, `【京东账号${$.index}】 ${$.nickName || $.UserName}\n【提醒⏰】您忘了种植新的水果\n请去京东APP或微信小程序选购并种植新的水果\n点击弹窗即达`, option);
         if ($.isNode()) {
-          await notify.sendNotify(`${$.name} - 您忘了种植新的水果`, `京东账号${$.index} ${$.nickName}\n【提醒⏰】您忘了种植新的水果\n请去京东APP或微信小程序选购并种植新的水果`);
+          await notify.sendNotify(`${$.name} - 您忘了种植新的水果`, `京东账号${$.index} ${$.nickName || $.UserName}\n【提醒⏰】您忘了种植新的水果\n请去京东APP或微信小程序选购并种植新的水果`);
         }
         return
       }
@@ -118,8 +119,13 @@ async function jdFruit() {
       await getTenWaterAward();//领取10浇水奖励
       await getWaterFriendGotAward();//领取为2好友浇水奖励
       await duck();
-      await doTenWaterAgain();//再次浇水
-      await predictionFruit();//预测水果成熟时间
+      if(!process.env.DO_TEN_WATER_AGAIN){
+        console.log('执行再次浇水')
+        await doTenWaterAgain();//再次浇水
+      } else {
+        console.log('不执行再次浇水，攒水滴')
+      }
+      //await predictionFruit();//预测水果成熟时间
     } else {
       console.log(`初始化农场数据异常, 请登录京东 app查看农场0元水果功能是否正常,农场初始化数据: ${JSON.stringify($.farmInfo)}`);
       message = `【数据异常】请手动登录京东app查看此账号${$.name}是否正常`;
@@ -296,7 +302,7 @@ async function doTenWater() {
       $.msg($.name, ``, `【京东账号${$.index}】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n请去京东APP或微信小程序查看\n点击弹窗即达`, option);
       $.done();
       if ($.isNode()) {
-        await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}水果已可领取`, `京东账号${$.index} ${$.nickName}\n${$.farmInfo.farmUserPro.name}已可领取`);
+        await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}水果已可领取`, `京东账号${$.index} ${$.nickName || $.UserName}\n${$.farmInfo.farmUserPro.name}已可领取`);
       }
     }
   } else {
@@ -420,7 +426,7 @@ async function doTenWaterAgain() {
       $.msg($.name, ``, `【京东账号${$.index}】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n请去京东APP或微信小程序查看\n点击弹窗即达`, option);
       $.done();
       if ($.isNode()) {
-        await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}水果已可领取`, `京东账号${$.index} ${$.nickName}\n${$.farmInfo.farmUserPro.name}已可领取`);
+        await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}水果已可领取`, `京东账号${$.index} ${$.nickName || $.UserName}\n${$.farmInfo.farmUserPro.name}已可领取`);
       }
     }
   } else if (overageEnergy >= 10) {
@@ -448,7 +454,7 @@ async function doTenWaterAgain() {
       $.msg($.name, ``, `【京东账号${$.index}】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n请去京东APP或微信小程序查看\n点击弹窗即达`, option);
       $.done();
       if ($.isNode()) {
-        await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}水果已可领取`, `京东账号${$.index} ${$.nickName}\n${$.farmInfo.farmUserPro.name}已可领取`);
+        await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}水果已可领取`, `京东账号${$.index} ${$.nickName || $.UserName}\n${$.farmInfo.farmUserPro.name}已可领取`);
       }
     }
   } else {
@@ -583,28 +589,34 @@ async function turntableFarm() {
 }
 //领取额外奖励水滴
 async function getExtraAward() {
-  await masterHelpTaskInitForFarm();
-  if ($.masterHelpResult.code === '0') {
-    if ($.masterHelpResult.masterHelpPeoples && $.masterHelpResult.masterHelpPeoples.length >= 5) {
-      // 已有五人助力。领取助力后的奖励
-      if (!$.masterHelpResult.masterGotFinal) {
-        await masterGotFinishedTaskForFarm();
-        if ($.masterGotFinished.code === '0') {
-          console.log(`已成功领取好友助力奖励：【${$.masterGotFinished.amount}】g水`);
-          message += `【额外奖励】${$.masterGotFinished.amount}g水领取成功\n`;
+  await farmAssistInit();
+  if ($.farmAssistResult.code === "0") {
+    if ($.farmAssistResult.assistFriendList && $.farmAssistResult.assistFriendList.length >= 2) {
+      if ($.farmAssistResult.status === 2) {
+        let num = 0;
+        for (let key of Object.keys($.farmAssistResult.assistStageList)) {
+          let vo = $.farmAssistResult.assistStageList[key]
+          if (vo.stageStaus === 2) {
+            await receiveStageEnergy()
+            if ($.receiveStageEnergy.code === "0") {
+              console.log(`已成功领取第${key + 1}阶段好友助力奖励：【${$.receiveStageEnergy.amount}】g水`)
+              num += $.receiveStageEnergy.amount
+            }
+          }
         }
-      } else {
-        console.log("已经领取过5好友助力额外奖励");
+        message += `【额外奖励】${num}g水领取成功\n`;
+      } else if ($.farmAssistResult.status === 3) {
+        console.log("已经领取过8好友助力额外奖励");
         message += `【额外奖励】已被领取过\n`;
       }
     } else {
-      console.log("助力好友未达到5个");
-      message += `【额外奖励】领取失败,原因：给您助力的人未达5个\n`;
+      console.log("助力好友未达到2个");
+      message += `【额外奖励】领取失败,原因：给您助力的人未达2个\n`;
     }
-    if ($.masterHelpResult.masterHelpPeoples && $.masterHelpResult.masterHelpPeoples.length > 0) {
+    if ($.farmAssistResult.assistFriendList && $.farmAssistResult.assistFriendList.length > 0) {
       let str = '';
-      $.masterHelpResult.masterHelpPeoples.map((item, index) => {
-        if (index === ($.masterHelpResult.masterHelpPeoples.length - 1)) {
+      $.farmAssistResult.assistFriendList.map((item, index) => {
+        if (index === ($.farmAssistResult.assistFriendList.length - 1)) {
           str += item.nickName || "匿名用户";
         } else {
           str += (item.nickName || "匿名用户") + ',';
@@ -616,6 +628,41 @@ async function getExtraAward() {
       message += `【助力您的好友】${str}\n`;
     }
     console.log('领取额外奖励水滴结束\n');
+  } else {
+    await masterHelpTaskInitForFarm();
+    if ($.masterHelpResult.code === '0') {
+      if ($.masterHelpResult.masterHelpPeoples && $.masterHelpResult.masterHelpPeoples.length >= 5) {
+        // 已有五人助力。领取助力后的奖励
+        if (!$.masterHelpResult.masterGotFinal) {
+          await masterGotFinishedTaskForFarm();
+          if ($.masterGotFinished.code === '0') {
+            console.log(`已成功领取好友助力奖励：【${$.masterGotFinished.amount}】g水`);
+            message += `【额外奖励】${$.masterGotFinished.amount}g水领取成功\n`;
+          }
+        } else {
+          console.log("已经领取过5好友助力额外奖励");
+          message += `【额外奖励】已被领取过\n`;
+        }
+      } else {
+        console.log("助力好友未达到5个");
+        message += `【额外奖励】领取失败,原因：给您助力的人未达5个\n`;
+      }
+      if ($.masterHelpResult.masterHelpPeoples && $.masterHelpResult.masterHelpPeoples.length > 0) {
+        let str = '';
+        $.masterHelpResult.masterHelpPeoples.map((item, index) => {
+          if (index === ($.masterHelpResult.masterHelpPeoples.length - 1)) {
+            str += item.nickName || "匿名用户";
+          } else {
+            str += (item.nickName || "匿名用户") + ',';
+          }
+          let date = new Date(item.time);
+          let time = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getMinutes();
+          console.log(`\n京东昵称【${item.nickName || "匿名用户"}】 在 ${time} 给您助过力\n`);
+        })
+        message += `【助力您的好友】${str}\n`;
+      }
+      console.log('领取额外奖励水滴结束\n');
+    }
   }
 }
 //助力好友
@@ -627,7 +674,7 @@ async function masterHelpShare() {
   console.log(`格式化后的助力码::${JSON.stringify(newShareCodes)}\n`);
 
   for (let code of newShareCodes) {
-    console.log(`开始助力京东账号${$.index} - ${$.nickName}的好友: ${code}`);
+    console.log(`开始助力京东账号${$.index} - ${$.nickName || $.UserName}的好友: ${code}`);
     if (!code) continue;
     if (code === $.farmInfo.farmUserPro.shareCode) {
       console.log('不能为自己助力哦，跳过自己的shareCode\n')
@@ -1060,6 +1107,16 @@ async function masterHelpTaskInitForFarm() {
   const functionId = arguments.callee.name.toString();
   $.masterHelpResult = await request(functionId);
 }
+//新版助力好友信息API
+async function farmAssistInit() {
+  const functionId = arguments.callee.name.toString();
+  $.farmAssistResult = await request(functionId, {"version":14,"channel":1,"babelChannel":"120"});
+}
+//新版领取助力奖励API
+async function receiveStageEnergy() {
+  const functionId = arguments.callee.name.toString();
+  $.receiveStageEnergy = await request(functionId, {"version":14,"channel":1,"babelChannel":"120"});
+}
 //接受对方邀请,成为对方好友的API
 async function inviteFriend() {
   $.inviteFriendRes = await request(`initForFarm`, {
@@ -1207,7 +1264,7 @@ async function initForFarm() {
 async function taskInitForFarm() {
   console.log('\n初始化任务列表')
   const functionId = arguments.callee.name.toString();
-  $.farmTask = await request(functionId);
+  $.farmTask = await request(functionId, {"version":14,"channel":1,"babelChannel":"120"});
 }
 //获取好友列表API
 async function friendListInitForFarm() {
@@ -1235,7 +1292,7 @@ async function showMsg() {
     $.msg($.name, subTitle, message, option);
     if ($.isNode()) {
       allMessage += `${subTitle}\n${message}${$.index !== cookiesArr.length ? '\n\n' : ''}`;
-      // await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `${subTitle}\n${message}`);
+      // await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}`, `${subTitle}\n${message}`);
     }
   } else {
     $.log(`\n${message}\n`);
@@ -1253,11 +1310,11 @@ function timeFormat(time) {
 }
 function readShareCode() {
   return new Promise(async resolve => {
-    $.get({url: `https://api.sharecode.ga/api/farm/${randomCount}`, timeout: 10000}, (err, resp, data) => {
+    $.get({url: ``, timeout: 10000}, (err, resp, data) => {
       try {
         if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
+          //console.log(JSON.stringify(err))
+          //console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
             console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
@@ -1333,34 +1390,35 @@ function requireConfig() {
 function TotalBean() {
   return new Promise(async resolve => {
     const options = {
-      url: "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion",
-      headers: {
-        Host: "me-api.jd.com",
-        Accept: "*/*",
-        Connection: "keep-alive",
-        Cookie: cookie,
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,
+      "headers": {
+        "Accept": "application/json,text/plain, */*",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-cn",
-        "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
-        "Accept-Encoding": "gzip, deflate, br"
+        "Connection": "keep-alive",
+        "Cookie": cookie,
+        "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
       }
     }
-    $.get(options, (err, resp, data) => {
+    $.post(options, (err, resp, data) => {
       try {
         if (err) {
-          $.logErr(err)
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
             data = JSON.parse(data);
-            if (data['retcode'] === "1001") {
+            if (data['retcode'] === 13) {
               $.isLogin = false; //cookie过期
-              return;
+              return
             }
-            if (data['retcode'] === "0" && data.data && data.data.hasOwnProperty("userInfo")) {
-              $.nickName = data.data.userInfo.baseInfo.nickname;
+            if (data['retcode'] === 0 && data.base && data.base.nickname) {
+              $.nickName = data.base.nickname;
             }
           } else {
-            $.log('京东服务器返回空数据');
+            console.log(`京东服务器返回空数据`)
           }
         }
       } catch (e) {
@@ -1406,14 +1464,21 @@ function safeGet(data) {
     return false;
   }
 }
+
 function taskUrl(function_id, body = {}) {
   return {
-    url: `${JD_API_HOST}?functionId=${function_id}&appid=wh5&body=${escape(JSON.stringify(body))}`,
+    url: `${JD_API_HOST}?functionId=${function_id}&body=${encodeURIComponent(JSON.stringify(body))}&appid=wh5`,
     headers: {
-      Cookie: cookie,
-      UserAgent: $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      "Host": "api.m.jd.com",
+      "Accept": "*/*",
+      "Origin": "https://carry.m.jd.com",
+      "Accept-Encoding": "gzip, deflate, br",
+      "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      "Accept-Language": "zh-CN,zh-Hans;q=0.9",
+      "Referer": "https://carry.m.jd.com/",
+      "Cookie": cookie
     },
-    timeout: 10000,
+    timeout: 10000
   }
 }
 function jsonParse(str) {
