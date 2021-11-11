@@ -60,7 +60,7 @@ var axios_1 = require("axios");
 var path = require("path");
 var TS_USER_AGENTS_1 = require("./TS_USER_AGENTS");
 var cookie = '', res = '', UserName, index;
-var shareCodeSelf = [], shareCode = [], shareCodeHW = ['e800d24a72a3d6b32b88f8d3570a3b42', '7fa15c06ed0fee5884ffe74f0fe7d12a'];
+var shareCodeSelf = [], shareCode = [], shareCodeHW = ['e800d24a72a3d6b32b88f8d3570a3b42'];
 var HW_Priority = true;
 process.env.HW_Priority === 'false' ? HW_Priority = false : '';
 !(function () { return __awaiter(void 0, void 0, void 0, function () {
