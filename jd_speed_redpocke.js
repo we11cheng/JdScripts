@@ -29,9 +29,8 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [], cookie = '', message;
-const linkIds = ["9wdf1YTT2L59Vr-meKskLA", "7ya6o83WSbNhrbYJqsMfFA"];
+const linkId = "7ya6o83WSbNhrbYJqsMfFA";
 const signLinkId = '9WA12jYGulArzWS7vcrwhw';
-let linkId
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -67,10 +66,7 @@ if ($.isNode()) {
         }
         continue
       }
-      for (const id of linkIds) {
-        linkId = id
-        await jsRedPacket()
-      }
+      await jsRedPacket()
     }
   }
 })()
@@ -155,7 +151,7 @@ async function sign() {
 function reward_query() {
   return new Promise(resolve => {
     $.get(taskGetUrl("spring_reward_query", {
-      "inviter": "7057MkYN_M4C3K_QNqU2YQ",
+      "inviter": "hrnTRC2MqBF_aWRB6sY5pQ",
       linkId
     }), async (err, resp, data) => {
       try {
@@ -182,7 +178,7 @@ function reward_query() {
 }
 async function redPacket() {
   return new Promise(resolve => {
-    $.get(taskGetUrl("spring_reward_receive",{"inviter": "7057MkYN_M4C3K_QNqU2YQ",linkId}),
+    $.get(taskGetUrl("spring_reward_receive",{"inviter": "hrnTRC2MqBF_aWRB6sY5pQ",linkId}),
         async (err, resp, data) => {
           try {
             if (err) {
@@ -214,7 +210,7 @@ async function redPacket() {
 
 function getPacketList() {
   return new Promise(resolve => {
-    $.get(taskGetUrl("spring_reward_list",{"pageNum":1,"pageSize":100,linkId,"inviter":"7057MkYN_M4C3K_QNqU2YQ"}), async (err, resp, data) => {
+    $.get(taskGetUrl("spring_reward_list",{"pageNum":1,"pageSize":100,linkId,"inviter":""}), async (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
