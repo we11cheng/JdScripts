@@ -92,11 +92,11 @@ async function jdGlobal() {
     await wheelsHome()
     await apTaskList()
     await wheelsHome()
-    if ($.canhelp) {
+   /*  if ($.canhelp) {
       console.log(`\n京东账号${$.index}开始助力【zero205】邀请有礼，感谢！\n`);
-      //await invite()
-      //await invite2()
-    }
+      await invite()
+      await invite2()
+    } */
     $.score = 0
     $.total = 0
     await taskList()
