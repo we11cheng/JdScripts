@@ -91,7 +91,7 @@ if ($.isNode()) {
       await $.wait(2000);
     }
   }
-  let res = await getAuthorShareCode('https://raw.githubusercontent.com/Aaron-lv/updateTeam/master/shareCodes/cfd.json')
+/*   let res = await getAuthorShareCode('https://raw.githubusercontent.com/Aaron-lv/updateTeam/master/shareCodes/cfd.json')
   if (!res) {
     $.http.get({url: 'https://purge.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/cfd.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
     await $.wait(1000)
@@ -101,7 +101,7 @@ if ($.isNode()) {
   if (!res2) {
     await $.wait(1000)
     res2 = await getAuthorShareCode('https://raw.fastgit.org/zero205/updateTeam/main/shareCodes/cfd.json')
-  }
+  } */
  // $.strMyShareIds = [...(res && res.shareId || []), ...(res2 || [])]
     $.strMyShareIds = []
   await shareCodesFormat()
