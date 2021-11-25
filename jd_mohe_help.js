@@ -101,6 +101,18 @@ $.shareId = [];
       }
     }
   }
+  
+   for (let i = 0; i < cookiesArr.length; i++) {
+    if (cookiesArr[i]) {
+      cookie = cookiesArr[i];
+      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+      $.index = i + 1;
+    //  await TotalBean();
+      console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}抽奖*********\n`);
+      await getAward();//抽奖
+    }
+  }
+  
 })()
     .catch((e) => {
       $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
