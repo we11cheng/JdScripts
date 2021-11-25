@@ -51,7 +51,7 @@ $.shareId = [];
   await $.wait(1000)
   await updateShareCodesCDN('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/jd_shareCodes.json')
   await $.wait(1000)
-  await getShareCode() 
+  await getShareCode() */
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -71,18 +71,18 @@ $.shareId = [];
         continue
       }
       await shareUrl();
-      await getCoin();//领取每三小时自动生产的热力值
+  /*     await getCoin();//领取每三小时自动生产的热力值
       await Promise.all([
         task0()
       ])
       await taskList();
-      await getAward();//抽奖
+      await getAward();//抽奖 */
     }
   }
-  if (allMessage) {
+ /*  if (allMessage) {
     if ($.isNode()) await notify.sendNotify($.name, allMessage);
     $.msg($.name, '', allMessage, {"open-url": "https://blindbox5g.jd.com"})
-  }*/
+  } */
   $.shareId = [...($.shareId || [])];
   for (let v = 0; v < cookiesArr.length; v++) {
     cookie = cookiesArr[v];
