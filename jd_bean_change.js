@@ -2060,7 +2060,6 @@ function GetDateTime(date) {
 
 // prettier-ignore
 function Env(t, e) {
-	"undefined" != typeof process && JSON.stringify(process.env).indexOf("GITHUB") > -1 && process.exit(0);
 	class s {
 		constructor(t) {
 			this.env = t
