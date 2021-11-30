@@ -70,7 +70,7 @@ $.shareId = [];
         }
         continue
       }
-   //   await shareUrl();
+      await shareUrl();
       await getCoin();//领取每三小时自动生产的热力值
       await Promise.all([
         task0()
@@ -83,7 +83,7 @@ $.shareId = [];
     if ($.isNode()) await notify.sendNotify($.name, allMessage);
     $.msg($.name, '', allMessage, {"open-url": "https://blindbox5g.jd.com"})
   }
-/*   $.shareId = [...($.shareId || []), ...($.updatePkActivityIdRes || [])];
+  $.shareId = [...($.shareId || [])];
   for (let v = 0; v < cookiesArr.length; v++) {
     cookie = cookiesArr[v];
     $.index = v + 1;
@@ -100,7 +100,7 @@ $.shareId = [];
         break
       }
     }
-  } */
+  } 
 })()
     .catch((e) => {
       $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
