@@ -422,13 +422,13 @@ if ($.isNode()) {
 		})
 		await $.wait(10 * 1000);
 	}
-	if ($.isNode() && allMessage2) {
+/* 	if ($.isNode() && allMessage2) {
 		allMessage2 += RemainMessage;
 		await notify.sendNotify("京东白嫖榜", `${allMessage2}`, {
 			url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
 		})
 		await $.wait(10 * 1000);
-	}
+	} */
 
 })()
 .catch((e) => {
