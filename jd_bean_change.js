@@ -47,7 +47,7 @@ let IndexGp4 = 0;
 
 let notifySkipList = "";
 let IndexAll = 0;
-let EnableMonth = "true";
+let EnableMonth = "false";
 let isSignError = false;
 let ReturnMessageTitle="";
 //IOS等用户直接用NobyDa的jd cookie
@@ -422,13 +422,13 @@ if ($.isNode()) {
 		})
 		await $.wait(10 * 1000);
 	}
-/* 	if ($.isNode() && allMessage2) {
+ 	if ($.isNode() && allMessage2) {
 		allMessage2 += RemainMessage;
 		await notify.sendNotify("京东白嫖榜", `${allMessage2}`, {
 			url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
 		})
 		await $.wait(10 * 1000);
-	} */
+	} 
 
 })()
 .catch((e) => {
@@ -2176,7 +2176,6 @@ function GetDateTime(date) {
 
 // prettier-ignore
 function Env(t, e) {
-	"undefined" != typeof process && JSON.stringify(process.env).indexOf("GITHUB") > -1 && process.exit(0);
 	class s {
 		constructor(t) {
 			this.env = t
