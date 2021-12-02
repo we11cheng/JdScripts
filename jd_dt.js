@@ -1,6 +1,6 @@
 /*
 京东答题领金豆
-活动入口：京东APP ==> 我的 ==> 签到领豆 ==> 兑权益 ==> 京豆答题
+活动入口：京东APP-》搜索 玩一玩-》瓜分20亿
 活动时间：2021-10-21至2021-12-31
 脚本更新时间：2021-11-23 17:00
 9 10 * * * jd_dt.js
@@ -17,7 +17,6 @@ if ($.isNode()) {
     cookiesArr.push(jdCookieNode[item])
   })
   if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
-
 } else {
   cookiesArr = [
     $.getdata("CookieJD"),
@@ -182,8 +181,7 @@ async function operation() {
             }
         };
         await redeemHomePage(`id=${$.id}&activeid=A_8943039_R_6_D_20211015&activeId=A_8943039_R_6_D_20211015&authcode=${$.authcode}&token=${$.taskToken}`);
-       // let condition = [2000, 4900, 62700, 149400]
-	    let condition = [149400]
+        let condition = [149400]
         for (let k = $.exchangeList.length-1; k >= 0; k--){
             if ($.coin >= condition[k] && $.exchangeList[k].left === 1){
                 consumeid = $.exchangeList[k].res.sID;
