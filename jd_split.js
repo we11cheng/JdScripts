@@ -74,7 +74,7 @@ $.shareCodes = [];
   if (!res2) {
     res2 = await getAuthorShareCode('ttps://raw.fastgit.org/zero205/updateTeam/main/shareCodes/split.json')
   } */
-  $.newShareCodes = [...new Set([...$.shareCodes]
+  $.newShareCodes = [...new Set([...$.shareCodes])]
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
