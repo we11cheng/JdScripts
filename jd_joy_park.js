@@ -82,7 +82,7 @@ message = ""
         continue
       }
       console.log(`\n\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-      if ($.isNode()) {
+/*       if ($.isNode()) {
         if (process.env.HELP_JOYPARK && process.env.HELP_JOYPARK == "false") {
         } else {
           await getShareCode()
@@ -102,7 +102,7 @@ message = ""
             }
           }
         }
-      }
+      } */
       //下地后还有有钱买Joy并且买了Joy
       $.hasJoyCoin = true
       await getJoyBaseInfo(undefined, undefined, undefined, true);
