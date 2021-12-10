@@ -4,6 +4,18 @@
 
 **之所以仍保留此仓库是为了给小白多提供一个低学习成本的选择，还请遵守声明。如果有能力部署本地运行，请优先考虑使用本地运行。不再提供更新yml文件，如有需要请自行添加。**
 
+> #### Jd呆瓜机器人  免费呆瓜，活动更多，更全面，更新更及时
+>
+> 3260665039  
+>
+> 1.添加好友直接发送CK即可添加，并自动绑定当前QQ，
+>
+> 2. 直接发送WSCK 可自动添加WSCK,免去频繁更新CK的烦恼
+>
+> 支持添加绑定多个账号
+
+
+
 ##### 保存gitee地址以防失联https://gitee.com/danwangshimoluo/jdTools.git
 
 * 本仓库发布的Script项目中涉及的任何解锁和解密分析脚本，仅用于测试和学习研究，禁止用于商业用途，不能保证其合法性，准确性，完整性和有效性，请根据情况自行判断.
@@ -103,23 +115,5 @@
 <!-- 此表格由 update_list.sh 脚本自动生成，请不要人工修改。 -->
 <!-- 这是隐藏信息，用来给 update_list.sh 脚本提供标记信息的，用于自动生成上面的脚本清单，请勿删除这里的标记信息。 -->
 
-**脚本兼容: QuantumultX, Loon, 小火箭, JSBox, Node.js**
 
-## 邀请码互助
-
-- [获取各类活动互助码脚本 jd_get_share_code.js](./jd_get_share_code.js)
-
-- [邀请码使用规范](githubAction.md#互助码类环境变量)(仅限云端)
-
-- [环境变量集合](./githubAction.md)
-
-- 获取京东cookie教程可参考：
-  
-  + [浏览器获取京东cookie教程](./backUp/GetJdCookie.md)
-    
-  + [插件获取京东cookie教程](./backUp/GetJdCookie2.md)
-    
-  + 京东APP扫码获取cookie(此种方式获取的cookie有效期为90天)(执行`node getJDCookie.js`即可)
-
-##### 获取京东cookie [JD_extra_cookie.js](./JD_extra_cookie.js)
 
