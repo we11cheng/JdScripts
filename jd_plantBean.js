@@ -133,8 +133,8 @@ async function jdPlantBean() {
           }
           await $.wait(Math.floor(Math.random() * 10 + 3) * 1000)
         }
-      }
-      */ ***************************
+      } */
+      // ***************************
 
       roundList = $.plantBeanIndexResult.data.roundList;
       currentRoundId = roundList[num].roundId;//本期的roundId
