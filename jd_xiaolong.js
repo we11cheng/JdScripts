@@ -1,6 +1,6 @@
 /*
 助力第一个CK。不知道还有没有豆子
-cron 10 9,17 * * * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_xiaolong.js
+cron 10 9,17 1-14 * * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_xiaolong.js
 * */
 const $ = new Env('骁龙');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
