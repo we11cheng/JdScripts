@@ -123,7 +123,7 @@ async function jdPlantBean() {
       jdPlantBeanShareArr.push($.myPlantUuid)
 
       // ***************************
-      // 报告运行次数
+      /* 报告运行次数
       if (ZLC) {
         for (let k = 0; k < 5; k++) {
           try {
@@ -134,7 +134,7 @@ async function jdPlantBean() {
           await $.wait(Math.floor(Math.random() * 10 + 3) * 1000)
         }
       }
-      // ***************************
+      */ ***************************
 
       roundList = $.plantBeanIndexResult.data.roundList;
       currentRoundId = roundList[num].roundId;//本期的roundId
