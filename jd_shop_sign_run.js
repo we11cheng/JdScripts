@@ -36,7 +36,7 @@ cron "10 1,9 * * *" script-path=https://raw.githubusercontent.com/jiulan/platypu
 ====================================小火箭=============================
 店铺签到 = type=cron,script-path=https://raw.githubusercontent.com/jiulan/platypus/main/scripts/jd_shop_sign.js, cronexpr="10 1,9 * * *", timeout=3600, enable=true
  */
-const $ = new Env('店铺签到_new');
+const $ = new Env('店铺签到_run');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
