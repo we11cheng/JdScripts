@@ -115,7 +115,7 @@ if ($.isNode()) {
         continue
       }
       await shopSign()
-	  if ( i == 0 || i == 11 )
+	  if ( i == 11 )
           await showMsg()
     }
   }
