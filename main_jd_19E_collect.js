@@ -95,54 +95,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
     }
     //
     $.subSceneid = "RAhomePageh5" 
-    for (let i = 0; i < helpSysInfoArr.length; i++) {
-        const s = helpSysInfoArr[i]
-        cookie = s.cookie
-        $.UserName = s.pin
-        $.index = i + 1;
-        $.isLogin = true;
-        $.nickName = $.UserName;
-        await TotalBean();
-        console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-        if (!$.isLogin) continue
-        $.UA = s.UA
-        //$.ZooFaker = utils()
-        $.joyytoken = s.joyytoken
-        $.blog_joyytoken = s.blog_joyytoken
-        $.secretp = s.secretp
-        //if (helpFlag) {
-            $.newHelpCodeArr = [...helpCodeArr]
-            for (let i = 0, codeLen = helpCodeArr.length; i < codeLen; i++) {
-                const helpCode = helpCodeArr[i]
-                const { pin, code } = helpCode
-                if (pin === $.UserName) continue
-                console.log(`去帮助用户：${pin}`)
-                const helpRes = await doApi("collectScore", null, { inviteId: code }, true, true)
-                if (helpRes?.result?.score) {
-                    const { alreadyAssistTimes, maxAssistTimes, maxTimes, score, times } = helpRes.result
-                    const c = maxAssistTimes - alreadyAssistTimes
-                    console.log(`互助成功，获得${score}金币，他还需要${maxTimes - times}人完成助力，你还有${maxAssistTimes - alreadyAssistTimes}次助力机会`)
-                    if (!c) break
-                } else {
-                    if (helpRes?.bizCode === -201) {
-                        $.newHelpCodeArr = $.newHelpCodeArr.filter(x => x.pin !== pin)
-                    }
-                    console.log(`互助失败，原因：${helpRes?.bizMsg}（${helpRes?.bizCode}）`)
-                    if (![0, -201, -202].includes(helpRes?.bizCode)) break
-                }
-            }
-            helpCodeArr = [...$.newHelpCodeArr]
-        //}
-        // $.joyytoken = ""
-        // cookie = cookie.replace(/joyytoken=\S+?;/, "joyytoken=;") 
-        if (teamPlayerAutoTeam.hasOwnProperty($.UserName)) {
-            const { groupJoinInviteId, groupNum, groupName } = teamLeaderArr[teamPlayerAutoTeam[$.UserName]]
-            console.log(`${groupName}人数：${groupNum}，正在去加入他的队伍...`)
-            await joinTeam(groupJoinInviteId)
-            teamLeaderArr[teamPlayerAutoTeam[$.UserName]].groupNum += 1
-            await $.wait(2000)
-        }
-    }
+
 })()
     .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
