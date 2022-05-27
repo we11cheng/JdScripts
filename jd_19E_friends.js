@@ -9,7 +9,7 @@ if (process.env.JD_19E != "true") {
 */
 
 
-const $ = new Env('热爱奇旅助力组队升级');
+const $ = new Env('热爱奇旅组队');
 
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
