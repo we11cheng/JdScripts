@@ -31,18 +31,27 @@ if (process.env.SEVENDAY_LIST && process.env.SEVENDAY_LIST != "") {
 	if (process.env.SEVENDAY_LIST.indexOf('&') > -1) {
       console.log(`您的店铺 token 选择的是用&隔开\n`)
     activityIdList = process.env.SEVENDAY_LIST.split('&');
+	}else if (process.env.SEVENDAY_LIST.indexOf('\n') > -1) {
+      console.log(`您的店铺 token 选择的是用\n隔开\n`)
+    activityIdList = process.env.SEVENDAY_LIST.split('&\n');
 	}
 }
 if (process.env.SEVENDAY_LIST2 && process.env.SEVENDAY_LIST2 != "") {
 	if (process.env.SEVENDAY_LIST2.indexOf('&') > -1) {
       console.log(`您的店铺 token 选择的是用&隔开\n`)
     activityIdList2 = process.env.SEVENDAY_LIST2.split('&');
+	}else if (process.env.SEVENDAY_LIST2.indexOf('\n') > -1) {
+      console.log(`您的店铺 token 选择的是用\n隔开\n`)
+    activityIdList2 = process.env.SEVENDAY_LIST2.split('\n');
 	}
 }
 if (process.env.SEVENDAY_LIST3 && process.env.SEVENDAY_LIST3 != "") {
 	if (process.env.SEVENDAY_LIST3.indexOf('&') > -1) {
       console.log(`您的店铺 token 选择的是用&隔开\n`)
     activityIdList3 = process.env.SEVENDAY_LIST3.split('&');
+	}else if (process.env.SEVENDAY_LIST3.indexOf('\n') > -1) {
+      console.log(`您的店铺 token 选择的是用\n隔开\n`)
+    activityIdList3 = process.env.SEVENDAY_LIST3.split('\n');
 	}
 }
 if (process.env.COOKIE_NUM && process.env.COOKIE_NUM != 10) {
