@@ -124,29 +124,29 @@ SEVENDAY_LIST3对应链接中sign/signActivity\n
                 message += `\n  └ 获得 ${$.bean} 京豆。`
             }
         }
-		    if( notify_account > -1 )
+		    if( notify_account == -1 )
 			{
-			    if ( notify_account == i + 1 ){
 				    if (message !== '') {
 					  if ($.isNode()) {
 									   await notify.sendNotify($.name, message, '', `\n`);
 					  } else {
 							  $.msg($.name, '有点儿收获', message);
 							 }
+					  message = ''
 				    }
-				  message = ''
-			    }
-			} else {
+				  
+			} else if( notify_account == i + 1 )
+			{
 			    if (message !== '') {
-                  if ($.isNode()) {
-                                   await notify.sendNotify($.name, message, '', `\n`);
-                  } else {
-                          $.msg($.name, '有点儿收获', message);
-                         }
-			     
+					  if ($.isNode()) {
+									   await notify.sendNotify($.name, message, '', `\n`);
+					  } else {
+							  $.msg($.name, '有点儿收获', message);
+							 }
                 }
-				message = ''
+				
 			}
+			message = ''
     }
 
 })()
