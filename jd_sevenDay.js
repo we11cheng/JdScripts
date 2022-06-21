@@ -11,7 +11,7 @@ SEVENDAY_LIST,SEVENDAY_LIST2,SEVENDAY_LIST3
 const $ = new Env('超级无线店铺签到');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
-let cookiesArr = [], cookie = '', message = '';
+let cookiesArr = [], cookie = '', message = '',notify_account = -1;
 // https://lzkj-isv.isvjcloud.com/sign/sevenDay/signActivity?activityId=
 let activityIdList = [
 ]
@@ -24,6 +24,9 @@ let activityIdList3 = [
 ]
 let lz_cookie = {}
 let CookieNum = 10;
+if (process.env.NOTIFY_ACCOUNT_NUMBER && process.env.NOTIFY_ACCOUNT_NUMBER != "") {
+    notify_account = process.env.NOTIFY_ACCOUNT_NUMBER
+}
 if (process.env.SEVENDAY_LIST && process.env.SEVENDAY_LIST != "") {
 	if (process.env.SEVENDAY_LIST.indexOf('&') > -1) {
       console.log(`您的店铺 token 选择的是用&隔开\n`)
@@ -121,14 +124,28 @@ SEVENDAY_LIST3对应链接中sign/signActivity\n
                 message += `\n  └ 获得 ${$.bean} 京豆。`
             }
         }
-		    if (message !== '') {
-                if ($.isNode()) {
-                                 await notify.sendNotify($.name, message, '', `\n`);
-                } else {
-                        $.msg($.name, '有点儿收获', message);
-                       }
-			    message = ''
-            }
+		    if( notify_account > -1 )
+			{
+			  if ( notify_account == i + 1 ){
+				  if (message !== '') {
+					  if ($.isNode()) {
+									   await notify.sendNotify($.name, message, '', `\n`);
+					  } else {
+							  $.msg($.name, '有点儿收获', message);
+							 }
+					  message = ''
+					}
+			  }
+			} else {
+			    if (message !== '') {
+                  if ($.isNode()) {
+                                   await notify.sendNotify($.name, message, '', `\n`);
+                  } else {
+                          $.msg($.name, '有点儿收获', message);
+                         }
+			      message = ''
+                }
+			}
     }
 
 })()
