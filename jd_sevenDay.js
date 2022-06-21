@@ -142,15 +142,17 @@ async function signActivity() {
     $.token = null;
     $.secretPin = null;
     $.venderId = null;
+	$.shopName = null;
     await getFirstLZCK()
     await getToken();
     await task('customer/getSimpleActInfoVo', `activityId=${$.activityId}`, 1)
     if ($.token) {
         await getMyPing();
+		await getShopInfo();
         if ($.secretPin) {
             await task('common/accessLogWithAD', `venderId=${$.venderId}&code=${$.activityType}&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=tg_xuanFuTuBiao`, 1);
-            console.log(`签到 -> ${$.activityId}`)
-            message += `\n 签到 -> ${$.activityId}`
+            console.log(`签到 -> ${$.shopName}\n${$.activityId}`)
+            message += `\n 签到 -> ${$.shopName}\n${$.activityId}`
             await task('sign/sevenDay/wx/signUp',`actId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`,1);
         } else {
             $.log("没有成功获取到用户信息")
@@ -164,15 +166,17 @@ async function signActivity2() {
     $.token = null;
     $.secretPin = null;
     $.venderId = null;
+	$.shopName = null;
     await getFirstLZCK()
     await getToken();
     await task('customer/getSimpleActInfoVo', `activityId=${$.activityId}`, 1)
     if ($.token) {
         await getMyPing();
+		await getShopInfo();
         if ($.secretPin) {
             await task('common/accessLogWithAD', `venderId=${$.venderId}&code=${$.activityType}&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=tg_xuanFuTuBiao`, 1);
-            console.log(`签到 -> ${$.activityId}`)
-            message += `\n 签到 -> ${$.activityId}`
+            console.log(`签到 -> ${$.shopName}\n${$.activityId}`)
+            message += `\n 签到 -> ${$.shopName}\n${$.activityId}`
             await task('sign/wx/signUp',`actId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`,1);
         } else {
             $.log("没有成功获取到用户信息")
@@ -186,15 +190,17 @@ async function signActivity3() {
     $.token = null;
     $.secretPin = null;
     $.venderId = null;
+	$.shopName = null;
     await getFirstLZCK()
     await getToken();
     await task2('customer/getSimpleActInfoVo', `activityId=${$.activityId}`, 1)
     if ($.token) {
         await getMyPing2();
+		await getShopInfo2();
         if ($.secretPin) {
             await task2('common/accessLogWithAD', `venderId=${$.venderId}&code=${$.activityType}&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=tg_xuanFuTuBiao`, 1);
-            console.log(`签到 -> ${$.activityId}`)
-            message += `\n 签到 -> ${$.activityId}`
+            console.log(`签到 -> ${$.shopName}\n${$.activityId}`)
+            message += `\n 签到 -> ${$.shopName}\n${$.activityId}`
             await task2('sign/wx/signUp',`actId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`,1);
         } else {
             $.log("没有成功获取到用户信息")
@@ -392,6 +398,121 @@ function taskUrl2(function_id, body, isCommon) {
 
     }
 }
+
+
+function getShopInfo() {
+    let opt = {
+        url: `https://lzkj-isv.isvjcloud.com/sign/wx/getShopInfo`,
+        headers: {
+            Host: 'lzkj-isv.isvjcloud.com',
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept-Language': 'zh-cn',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Origin: 'https://lzkj-isv.isvjcloud.com',
+            'User-Agent': `jdapp;iPhone;9.5.4;13.6;${$.UUID};network/wifi;ADID/${$.ADID};model/iPhone10,3;addressid/0;appBuild/167668;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
+            Connection: 'keep-alive',
+            Referer: $.activityUrl,
+            Cookie: cookie,
+        },
+        body: `venderId=${$.venderId}`
+    }
+    return new Promise(resolve => {
+        $.post(opt, (err, resp, data) => {
+            try {
+                if (err) {
+                    $.log(err)
+                } else {
+                    if (resp['headers']['set-cookie']) {
+                        cookie = `${originCookie};`
+                        for (let sk of resp['headers']['set-cookie']) {
+                            lz_cookie[sk.split(";")[0].substr(0, sk.split(";")[0].indexOf("="))] = sk.split(";")[0].substr(sk.split(";")[0].indexOf("=") + 1)
+                        }
+                        for (const vo of Object.keys(lz_cookie)) {
+                            cookie += vo + '=' + lz_cookie[vo] + ';'
+                        }
+                    }
+                    if (data) {
+                        data = JSON.parse(data)
+                        if (data.isOk) {
+                    //      $.log(`\n  ${data.shopInfo.shopName}`)
+                    //      message += `\n 你好：${data.shopInfo.shopName}`
+                            $.shopName = data.shopInfo.shopName
+                        } else {
+                            $.log(data.errorMessage)
+                        }
+                    } else {
+                        $.log("京东返回了空数据")
+                    }
+                }
+            } catch (error) {
+                $.log(error)
+            } finally {
+                resolve();
+            }
+
+        })
+    })
+}
+
+
+function getShopInfo2() {
+    let opt = {
+        url: `https://cjhy-isv.isvjcloud.com/sign/wx/getShopInfo`,
+        headers: {
+            Host: 'lzkj-isv.isvjcloud.com',
+            Accept: 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept-Language': 'zh-cn',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Origin: 'https://cjhy-isv.isvjcloud.com',
+            'User-Agent': `jdapp;iPhone;9.5.4;13.6;${$.UUID};network/wifi;ADID/${$.ADID};model/iPhone10,3;addressid/0;appBuild/167668;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`,
+            Connection: 'keep-alive',
+            Referer: $.activityUrl,
+            Cookie: cookie,
+        },
+        body: `venderId=${$.venderId}`
+    }
+    return new Promise(resolve => {
+        $.post(opt, (err, resp, data) => {
+            try {
+                if (err) {
+                    $.log(err)
+                } else {
+                    if (resp['headers']['set-cookie']) {
+                        cookie = `${originCookie};`
+                        for (let sk of resp['headers']['set-cookie']) {
+                            lz_cookie[sk.split(";")[0].substr(0, sk.split(";")[0].indexOf("="))] = sk.split(";")[0].substr(sk.split(";")[0].indexOf("=") + 1)
+                        }
+                        for (const vo of Object.keys(lz_cookie)) {
+                            cookie += vo + '=' + lz_cookie[vo] + ';'
+                        }
+                    }
+                    if (data) {
+                        data = JSON.parse(data)
+                        if (data.isOk) {
+                    //      $.log(`\n  ${data.shopInfo.shopName}`)
+                    //       message += `\n 你好：${data.shopInfo.shopName}`
+                            $.shopName = data.shopInfo.shopName
+                        } else {
+                            $.log(data.errorMessage)
+                        }
+                    } else {
+                        $.log("京东返回了空数据")
+                    }
+                }
+            } catch (error) {
+                $.log(error)
+            } finally {
+                resolve();
+            }
+
+        })
+    })
+}
+
 
 function getMyPing() {
     let opt = {
