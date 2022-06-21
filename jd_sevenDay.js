@@ -118,7 +118,7 @@ SEVENDAY_LIST3对应链接中sign/signActivity\n
 					$.activityUrl = `https://lzkj-isv.isvjcloud.com/sign/sevenDay/signActivity?activityId=${$.activityId}&venderId=${$.venderId}&adsource=&sid=&un_area=`
 					$.activityId = activityIdList[a];
 					await signActivity();
-					await $.wait(2000)
+					await $.wait(10000)
 				}
             }
             console.log("签到类型2")
@@ -128,7 +128,7 @@ SEVENDAY_LIST3对应链接中sign/signActivity\n
 					$.activityUrl = `https://lzkj-isv.isvjcloud.com/sign/signActivity2?activityId=${$.activityId}&venderId=${$.venderId}&adsource=&sid=&un_area=`
 					$.activityId = activityIdList2[a];
 					await signActivity2();
-					await $.wait(2000)
+					await $.wait(10000)
 				}
             }
             console.log("签到类型3")
@@ -138,7 +138,7 @@ SEVENDAY_LIST3对应链接中sign/signActivity\n
 					$.activityUrl = `https://cjhy-isv.isvjcloud.com/sign/signActivity?activityId=${$.activityId}&venderId=${$.venderId}&adsource=&sid=&un_area=`
 					$.activityId = activityIdList3[a];
 					await signActivity3();
-					await $.wait(2000)
+					await $.wait(10000)
 				}
             }
             if ($.bean > 0) {
