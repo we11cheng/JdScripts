@@ -93,6 +93,7 @@ SEVENDAY_LIST3对应链接中sign/signActivity\n
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
             console.log("签到类型1")
+            message += `\n 签到类型1`
             for(let a in activityIdList){
                 $.activityUrl = `https://lzkj-isv.isvjcloud.com/sign/sevenDay/signActivity?activityId=${$.activityId}&venderId=${$.venderId}&adsource=&sid=&un_area=`
                 $.activityId = activityIdList[a];
@@ -100,6 +101,7 @@ SEVENDAY_LIST3对应链接中sign/signActivity\n
                 await $.wait(2000)
             }
             console.log("签到类型2")
+            message += `\n 签到类型2`
             for(let a in activityIdList2){
                 $.activityUrl = `https://lzkj-isv.isvjcloud.com/sign/signActivity2?activityId=${$.activityId}&venderId=${$.venderId}&adsource=&sid=&un_area=`
                 $.activityId = activityIdList2[a];
@@ -107,6 +109,7 @@ SEVENDAY_LIST3对应链接中sign/signActivity\n
                 await $.wait(2000)
             }
             console.log("签到类型3")
+            message += `\n 签到类型3`
             for(let a in activityIdList3){
                 $.activityUrl = `https://cjhy-isv.isvjcloud.com/sign/signActivity?activityId=${$.activityId}&venderId=${$.venderId}&adsource=&sid=&un_area=`
                 $.activityId = activityIdList3[a];
@@ -114,17 +117,18 @@ SEVENDAY_LIST3对应链接中sign/signActivity\n
                 await $.wait(2000)
             }
             if ($.bean > 0) {
-                message += `\n【京东账号${$.index}】${$.nickName || $.UserName} \n       └ 获得 ${$.bean} 京豆。`
+                message += `\n  └ 获得 ${$.bean} 京豆。`
             }
         }
+		    if (message !== '') {
+                if ($.isNode()) {
+                                 await notify.sendNotify($.name, message, '', `\n`);
+                } else {
+                        $.msg($.name, '有点儿收获', message);
+                       }
+            }
     }
-    if (message !== '') {
-        if ($.isNode()) {
-            await notify.sendNotify($.name, message, '', `\n`);
-        } else {
-            $.msg($.name, '有点儿收获', message);
-        }
-    }
+
 })()
     .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
@@ -146,6 +150,7 @@ async function signActivity() {
         if ($.secretPin) {
             await task('common/accessLogWithAD', `venderId=${$.venderId}&code=${$.activityType}&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=tg_xuanFuTuBiao`, 1);
             console.log(`签到 -> ${$.activityId}`)
+            message += `\n 签到 -> ${$.activityId}`
             await task('sign/sevenDay/wx/signUp',`actId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`,1);
         } else {
             $.log("没有成功获取到用户信息")
@@ -167,6 +172,7 @@ async function signActivity2() {
         if ($.secretPin) {
             await task('common/accessLogWithAD', `venderId=${$.venderId}&code=${$.activityType}&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=tg_xuanFuTuBiao`, 1);
             console.log(`签到 -> ${$.activityId}`)
+            message += `\n 签到 -> ${$.activityId}`
             await task('sign/wx/signUp',`actId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`,1);
         } else {
             $.log("没有成功获取到用户信息")
@@ -188,6 +194,7 @@ async function signActivity3() {
         if ($.secretPin) {
             await task2('common/accessLogWithAD', `venderId=${$.venderId}&code=${$.activityType}&pin=${encodeURIComponent($.secretPin)}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=tg_xuanFuTuBiao`, 1);
             console.log(`签到 -> ${$.activityId}`)
+            message += `\n 签到 -> ${$.activityId}`
             await task2('sign/wx/signUp',`actId=${$.activityId}&pin=${encodeURIComponent($.secretPin)}`,1);
         } else {
             $.log("没有成功获取到用户信息")
@@ -230,11 +237,14 @@ function task(function_id, body, isCommon = 0) {
                                         // console.log(data);
                                         if (data.isOk) {
                                             console.log("签到成功");
+                                            message += `\n 签到成功`
                                             if (data.signResult && data.signResult.gift) {
                                                 console.log(data.signResult.gift.giftName);
+                                                message += `\n` + data.signResult.gift.giftName
                                             }
                                         } else {
                                             console.log(data.msg);
+                                            message += `\n` + data.msg
                                         }
                                     }
                                     break
@@ -243,11 +253,14 @@ function task(function_id, body, isCommon = 0) {
                                         // console.log(data);
                                         if (data.isOk) {
                                             console.log("签到成功");
+                                            message += `\n 签到成功`
                                             if (data.gift.giftName && data.signResult.gift) {
                                                 console.log(data.gift.giftName);
+                                                message += `\n` +  data.gift.giftName
                                             }
                                         } else {
                                             console.log(data.msg);
+                                            message += `\n` +  data.msg
                                         }
                                     }
                                     break
@@ -298,11 +311,14 @@ function task2(function_id, body, isCommon = 0) {
                                     if(data){
                                         if (data.isOk) {
                                             console.log("签到成功");
+                                            message += `\n 签到成功`
                                             if (data.signResult.giftName) {
                                                 console.log(data.signResult.giftName);
+                                                message += `\n` +  data.signResult.giftName
                                             }
                                         } else {
                                             console.log(data.msg);
+                                            message += `\n` + data.msg
                                         }
                                     }
                                     break
@@ -310,11 +326,14 @@ function task2(function_id, body, isCommon = 0) {
                                     if(data){
                                         if (data.isOk) {
                                             console.log("签到成功");
+                                            message += `\n 签到成功`
                                             if (data.gift.giftName) {
                                                 console.log(data.gift.giftName);
+                                                message += `\n` + data.gift.giftName
                                             }
                                         } else {
                                             console.log(data.msg);
+                                            message += `\n` + data.msg
                                         }
                                     }
                                     break
@@ -410,7 +429,8 @@ function getMyPing() {
                     if (data) {
                         data = JSON.parse(data)
                         if (data.result) {
-                            $.log(`你好：${data.data.nickname}`)
+                     //      $.log(`你好：${data.data.nickname}`)
+                    //       message += `\n 你好：${data.data.nickname}`
                             $.pin = data.data.nickname;
                             $.secretPin = data.data.secretPin;
                         } else {
@@ -466,6 +486,7 @@ function getMyPing2() {
                         data = JSON.parse(data)
                         if (data.result) {
                             $.log(`你好：${data.data.nickname}`)
+                            message += `\n 你好：${data.data.nickname}`
                             $.pin = data.data.nickname;
                             $.secretPin = data.data.secretPin;
                         } else {
