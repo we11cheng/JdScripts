@@ -126,16 +126,16 @@ SEVENDAY_LIST3对应链接中sign/signActivity\n
         }
 		    if( notify_account > -1 )
 			{
-			  if ( notify_account == i + 1 ){
-				  if (message !== '') {
+			    if ( notify_account == i + 1 ){
+				    if (message !== '') {
 					  if ($.isNode()) {
 									   await notify.sendNotify($.name, message, '', `\n`);
 					  } else {
 							  $.msg($.name, '有点儿收获', message);
 							 }
-					  message = ''
-					}
-			  }
+				    }
+				  message = ''
+			    }
 			} else {
 			    if (message !== '') {
                   if ($.isNode()) {
@@ -143,8 +143,9 @@ SEVENDAY_LIST3对应链接中sign/signActivity\n
                   } else {
                           $.msg($.name, '有点儿收获', message);
                          }
-			      message = ''
+			     
                 }
+				message = ''
 			}
     }
 
