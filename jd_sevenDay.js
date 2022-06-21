@@ -92,6 +92,7 @@ SEVENDAY_LIST3对应链接中sign/signActivity\n
             $.bean = 0;
             $.ADID = getUUID('xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', 1);
             $.UUID = getUUID('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+			message += `【京东账号${$.index}】${$.nickName || $.UserName}\n`
             console.log("签到类型1")
             message += `\n 签到类型1`
             for(let a in activityIdList){
@@ -126,6 +127,7 @@ SEVENDAY_LIST3对应链接中sign/signActivity\n
                 } else {
                         $.msg($.name, '有点儿收获', message);
                        }
+			    message = ''
             }
     }
 
