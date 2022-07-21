@@ -66,7 +66,7 @@ if ($.isNode()) {
                         if (new Date().getTime() < item.endTime + 60 * 60 * 24 * 1000 * 2) {
                             let title=item.trialName.length>15?item.trialName.substr(0,30)+'...':item.trialName
 							console.log(`可免费领取-${title}`)
-                            $.notifyMsg += `【账号】${$.index}.${$.nickName || $.UserName}  可免费领取-${title}\n入口:京东-我的-更多工具-新品试用\n`;
+                            $.notifyMsg += `【账号】${$.nickName || $.UserName}  可免费领取-${title}\n入口:京东-我的-更多工具-新品试用\n`;
                         } else {
                             console.log("开始领取两天后不再推")
                         }
